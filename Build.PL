@@ -8,8 +8,9 @@ my $builder = Module::Build->new(
     dist_author         => 'OHTSUKA Ko-hei <nene@kokogiko.net>',
     dist_version_from   => 'lib/HTTP/MobileAgent/Plugin/RoamingZone.pm',
     requires => {
-        'Test::More' => 0,
-        'version'    => 0,
+        'Test::Base'        => 0,
+        'version'           => 0,
+        'HTTP::MobileAgent' => '0.27',
     },
     add_to_cleanup      => [ 'HTTP-MobileAgent-Plugin-RoamingZone-*' ],
 );

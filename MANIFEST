@@ -4,7 +4,7 @@ lib/HTTP/MobileAgent/Plugin/RoamingZone.pm
 lib/HTTP/MobileAgent/Plugin/RoamingZone/CodeHash.pm
 Makefile.PL
 MANIFEST
+META.yml
 README
 t/00.load.t
 t/01.parse.t
-META.yml
