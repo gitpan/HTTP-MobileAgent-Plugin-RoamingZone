@@ -6,7 +6,7 @@ NTTドコモ
 
 L<http://www.nttdocomo.co.jp/service/imode/make/content/ip/index.html#world>に記載された仕様に従い実装され、
 国番号を取得し、L<http://www.itu.int/itudoc/itu-t/ob-lists/icc/e212_685.html>で配布されている国番号->国名の
-変換テーブルに従って、国名/国内海外判定を行っています。
+変換テーブルに従って、Mobile::Data::ITUモジュールを使って国名/国内海外判定を行っています。
 
 SoftBank
 
@@ -16,10 +16,8 @@ L<http://creation.mb.softbank.jp/download.php?docid=102>にて配布されてい
 KDDI
 
 公式な仕様が存在していませんが、L<http://mscl.jp/diary/img/KDDI-SA3D.txt>等でレポートされているグローバル
-パスポート携帯のみに存在するヘッダC<x-up-devcap-zone>において、地域情報が得られるのではないかとの想定の元
-実装しています。
-公式仕様がないため、実際にヘッダが返すデータと地域との対応表がありませんが、レポート・テストケース等の
-報告をお待ちしております。
+パスポート携帯のみに存在するヘッダC<x-up-devcap-zone>において、L<http://www.ifast.org/files/SIDNumeric.htm>
+の仕様に規定された国コードが返される模様であるため、Mobile::Data::SIDモジュールを使って国名変換を行います。
 
 
 INSTALLATION
@@ -41,7 +39,10 @@ Alternatively, to install with Module::Build, you can use the following commands
 
 DEPENDENCIES
 
-None.
+HTTP::MobileAgengt
+Mobile::Data::ITU
+Mobile::Data::SID
+Test::Base
 
 
 COPYRIGHT AND LICENCE

@@ -109,7 +109,7 @@ Unknown
 KDDI-SA3D UP.Browser/6.2_7.2.7.1.K.1.5.123 (GUI) MMP/2.0
 NULL
 --- expected
-440
+12304
 Japan
 0
 
@@ -118,7 +118,7 @@ Japan
 KDDI-SA3D UP.Browser/6.2_7.2.7.1.K.1.5.123 (GUI) MMP/2.0
 UNDEF
 --- expected
-440
+12304
 Japan
 0
 
@@ -137,6 +137,6 @@ KDDI-SA3D UP.Browser/6.2_7.2.7.1.K.1.5.123 (GUI) MMP/2.0
 12345
 --- expected
 12345
-Unknown
-1
+Japan
+0
 

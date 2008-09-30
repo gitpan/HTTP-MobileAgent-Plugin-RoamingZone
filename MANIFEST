@@ -1,9 +1,8 @@
 Build.PL
 Changes
 lib/HTTP/MobileAgent/Plugin/RoamingZone.pm
-lib/HTTP/MobileAgent/Plugin/RoamingZone/CodeHash.pm
 Makefile.PL
-MANIFEST
+MANIFEST			This list of files
 META.yml
 README
 t/00.load.t

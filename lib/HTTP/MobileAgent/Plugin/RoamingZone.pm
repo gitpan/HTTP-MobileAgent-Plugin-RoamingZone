@@ -4,23 +4,30 @@ use warnings;
 use strict;
 use Carp;
 
-use version; our $VERSION = qv('0.0.2');
+use version; our $VERSION = qv('0.0.3');
 use HTTP::MobileAgent;
-use HTTP::MobileAgent::Plugin::RoamingZone::CodeHash;
+use Mobile::Data::ITU;
+use Mobile::Data::SID;
 
 ##########################################
 # Base Module
 
 package # hide from PAUSE 
        HTTP::MobileAgent;
+use Mobile::Data::ITU;
 
 sub zone_code { $_[0]->_zone_code || '440' }
 
 sub _zone_code {}
 
 sub zone_name { 
-    $_[0]->_zone_name ||
-    HTTP::MobileAgent::Plugin::RoamingZone::CodeHash::zone_name($_[0]->zone_code) || 'Unknown'; 
+    my $ret = $_[0]->_zone_name;
+    unless ( $ret ) {
+        my $code = $_[0]->zone_code;
+        $ret = itu2country($code) if ($code =~ /^\d+$/);
+        $ret = 'Unknown' unless ($ret);
+    }
+    $ret;
 }
 
 sub _zone_name {}
@@ -45,24 +52,28 @@ sub _zone_code {
 
 package # hide from PAUSE
        HTTP::MobileAgent::EZweb;
+use Mobile::Data::SID;
 
-sub _zone_code { $_[0]->get_header('x-up-devcap-zone') }
+sub _zone_code { $_[0]->get_header('x-up-devcap-zone') || 12304 }
 
-sub _zone_name { 'Japan' if ( $_[0]->zone_code eq '12304' ) }
+sub _zone_name { sid2country( $_[0]->zone_code ) }
 
 ##########################################
 # SoftBank Module
 
 package # hide from PAUSE
        HTTP::MobileAgent::Vodafone;
+use Mobile::Data::ITU;
 
 sub _zone_code { $_[0]->get_header('x-jphone-region') }
 
-sub _zone_name {'Japan' if ( $_[0]->zone_code eq '44020' ) }
+#sub _zone_name {'Japan' if ( $_[0]->zone_code eq '44020' ) }
 
 
 1; # Magic true value required at end of module
 __END__
+
+=encoding utf-8
 
 =head1 NAME
 
@@ -104,6 +115,10 @@ HTTP::MobileAgent::Plugin::RoamingZone - 日本の携帯電話から国内/海�
 
 =item C<< HTTP::MobileAgengt >>
 
+=item C<< Mobile::Data::ITU >>
+
+=item C<< Mobile::Data::SID >>
+
 =item C<< Test::Base >>
 
 =back
@@ -117,7 +132,7 @@ HTTP::MobileAgent::Plugin::RoamingZone - 日本の携帯電話から国内/海�
 
 L<http://www.nttdocomo.co.jp/service/imode/make/content/ip/index.html#world>に記載された仕様に従い実装され、
 国番号を取得し、L<http://www.itu.int/itudoc/itu-t/ob-lists/icc/e212_685.html>で配布されている国番号->国名の
-変換テーブルに従って、国名/国内海外判定を行っています。
+変換テーブルに従って、Mobile::Data::ITUモジュールを使って国名/国内海外判定を行っています。
 
 =head2 SoftBank
 
@@ -127,10 +142,8 @@ L<http://creation.mb.softbank.jp/download.php?docid=102>にて配布されてい
 =head2 KDDI
 
 公式な仕様が存在していませんが、L<http://mscl.jp/diary/img/KDDI-SA3D.txt>等でレポートされているグローバル
-パスポート携帯のみに存在するヘッダC<x-up-devcap-zone>において、地域情報が得られるのではないかとの想定の元
-実装しています。
-公式仕様がないため、実際にヘッダが返すデータと地域との対応表がありませんが、レポート・テストケース等の
-報告をお待ちしております。
+パスポート携帯のみに存在するヘッダC<x-up-devcap-zone>において、L<http://www.ifast.org/files/SIDNumeric.htm>
+の仕様に規定された国コードが返される模様であるため、Mobile::Data::SIDモジュールを使って国名変換を行います。
 
 
 =head1 AUTHOR
